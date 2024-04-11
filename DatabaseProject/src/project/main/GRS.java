@@ -2,6 +2,7 @@ package project.main;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -157,29 +158,34 @@ public class GRS {
 
     private static void rentEquipment(Scanner cin) {
         System.out.println("Enter USER ID:");
-        String firstName = cin.nextLine();
+        int userId = Integer.parseInt(cin.nextLine());
+
+		System.out.println("Enter employee SSN:");
+		int empSsn = Integer.parseInt(cin.nextLine());
 
         System.out.println("What to Rent?");
-        String attributeToUpdate = cin.nextLine();
+        int equipmentSerialNo = Integer.parseInt(cin.nextLine());
 
-        String sql = "";
+		System.out.println("Enter value of equipment:");
+		double value = Double.parseDouble(cin.nextLine());
 
-        Utilities.placeholder();
+		System.out.println("Enter estimated date of arrival:");
+		String estDoa = cin.nextLine();
+
+		String sql2 = "INSERT INTO Rental (rental_no, num_items, value, est_doa, emp_ssn, user_id) VALUES ((SELECT MAX(rental_no) + 1 FROM Rental), 1, ?, ?, ?, ?)";
+		String sql = "UPDATE Equipment SET user_id = ?, rental_id = (SELECT MAX(rental_no) FROM Rental) WHERE equipment_serial_no = ?";
+
+        SQL.ps_rentEquipment(sql, sql2, userId, equipmentSerialNo, value, estDoa, empSsn);
     }
 
     private static void returnEquipment(Scanner cin) {
-        System.out.println("Enter USER ID:");
-        String firstName = cin.nextLine();
+        System.out.println("Enter rental number:");
+		int rentalNo = Integer.parseInt(cin.nextLine());
 
-        System.out.println("What to return?");
-        String attributeToUpdate = cin.nextLine();
+		String sql = "UPDATE Equipment SET user_id = NULL, rental_id = NULL WHERE rental_id = ?";
+		String sql2 = "DELETE FROM Rental WHERE rental_no = ?";
 
-        String sql = "";
-
-        System.out.println("Enter Date:");
-        String startDate = cin.nextLine();
-
-        Utilities.placeholder();
+		SQL.ps_returnEquipment(sql, sql2, rentalNo);
     }
 
     private static void scheduleDelivery(Scanner cin) {

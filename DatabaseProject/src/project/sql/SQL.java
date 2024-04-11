@@ -1,6 +1,7 @@
 package project.sql;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -244,5 +245,48 @@ public class SQL {
         }
         sqlQuery(GRS.conn, ps);
     }
+
+	public static void ps_rentEquipment(String sql, String sql2, int userId, int equipmentSerialNo, double value, String estDoa, int empSsn) {
+		try {
+			ps = GRS.conn.prepareStatement(sql);
+			ps.setInt(1, userId);
+			ps.setInt(2, equipmentSerialNo);
+
+			PreparedStatement ps2 = GRS.conn.prepareStatement(sql2);
+			ps2.setDouble(1, value);
+			ps2.setString(2, estDoa);
+			ps2.setInt(3, empSsn);
+			ps2.setInt(4, userId);
+
+			int rowsAffected2 = ps2.executeUpdate();
+
+			int rowsAffected = ps.executeUpdate();
+
+			if (rowsAffected > 0 && rowsAffected2 > 0) {
+				System.out.println("Successfully rented equipment.");
+			} else {
+				System.out.println("Failed to rent equipment.");
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	public static void ps_returnEquipment(String sql, String sql2, int rentalNo) {
+		try {
+			ps = GRS.conn.prepareStatement(sql);
+			ps.setInt(1, rentalNo);
+
+			PreparedStatement ps2 = GRS.conn.prepareStatement(sql2);
+			ps2.setInt(1, rentalNo);
+
+			int rowsAffected = ps.executeUpdate();
+			int rowsAffected2 = ps2.executeUpdate();
+
+			System.out.println("Successfully returned equipment.");
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+	}
 
 }
