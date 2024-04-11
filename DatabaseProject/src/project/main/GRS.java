@@ -123,15 +123,18 @@ public class GRS {
         System.out.println("Enter first name to search:");
         String firstName = cin.nextLine();
 
+		System.out.println("Enter last name to search:");
+        String lastName = cin.nextLine();
+
         System.out.println("What to Update?");
         String attributeToUpdate = cin.nextLine();
 
         System.out.println("What to Update?");
         String newValue = cin.nextLine();
 
-        String sql = "UPDATE Community_Member SET ? LIKE ? WHERE Fname LIKE ?";
+        String sql = "UPDATE Community_Member SET ? = ? WHERE Fname = ? AND Lname = ?";
 
-        SQL.ps_editMember(sql, firstName, attributeToUpdate, newValue);
+        SQL.ps_editMember(sql, firstName, lastName, attributeToUpdate, newValue);
     }
 
     private static void deleteMember(Scanner cin) {
@@ -171,8 +174,8 @@ public class GRS {
 		System.out.println("Enter estimated date of arrival:");
 		String estDoa = cin.nextLine();
 
-		String sql2 = "INSERT INTO Rental (rental_no, num_items, value, est_doa, emp_ssn, user_id) VALUES ((SELECT MAX(rental_no) + 1 FROM Rental), 1, ?, ?, ?, ?)";
-		String sql = "UPDATE Equipment SET user_id = ?, rental_id = (SELECT MAX(rental_no) FROM Rental) WHERE equipment_serial_no = ?";
+		String sql2 = "INSERT INTO Rental (rental_no, num_items, value, est_doa, emp_ssn, user_id, equipment_ID) VALUES ((SELECT MAX(rental_no) + 1 FROM Rental), 1, ?, ?, ?, ?, ?)";
+		String sql = "UPDATE Equipment SET rental_id = (SELECT MAX(rental_no) FROM Rental) WHERE equipment_serial_no = ?";
 
         SQL.ps_rentEquipment(sql, sql2, userId, equipmentSerialNo, value, estDoa, empSsn);
     }
@@ -181,7 +184,7 @@ public class GRS {
         System.out.println("Enter rental number:");
 		int rentalNo = Integer.parseInt(cin.nextLine());
 
-		String sql = "UPDATE Equipment SET user_id = NULL, rental_id = NULL WHERE rental_id = ?";
+		String sql = "UPDATE Equipment SET rental_id = NULL WHERE rental_id = ?";
 		String sql2 = "DELETE FROM Rental WHERE rental_no = ?";
 
 		SQL.ps_returnEquipment(sql, sql2, rentalNo);
