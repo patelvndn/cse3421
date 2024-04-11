@@ -289,4 +289,44 @@ public class SQL {
 		}
 	}
 
+        public static void ps_scheduleDelivery(int droneID, int rentalNo,
+            String sql) {
+        try {
+            ps = GRS.conn.prepareStatement(sql);
+            ps.setInt(1, droneID);
+
+            ps.setInt(2, rentalNo);
+
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Successfully scheduled delivery.");
+            } else {
+                System.out.println("Unable to schedule delivery.");
+
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void ps_schedulePickup(int rentalNo, String sql) {
+        try {
+            ps = GRS.conn.prepareStatement(sql);
+
+            ps.setInt(1, rentalNo);
+
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Successfully scheduled pickup.");
+            } else {
+                System.out.println("Unable to schedule pickup.");
+
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 }

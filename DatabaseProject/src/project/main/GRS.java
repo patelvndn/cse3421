@@ -190,34 +190,27 @@ public class GRS {
 		SQL.ps_returnEquipment(sql, sql2, rentalNo);
     }
 
-    private static void scheduleDelivery(Scanner cin) {
-        System.out.println("Enter USER ID:");
-        String firstName = cin.nextLine();
+   private static void scheduleDelivery(Scanner cin) {
+        // Find the rental number and assign a drone to deliver it...
+        System.out.println("What rental number?");
+        int rentalNo = cin.nextInt();
 
-        System.out.println("What to deliver?");
-        String attributeToUpdate = cin.nextLine();
+        System.out.println("Enter Drone ID?:");
+        int droneID = cin.nextInt();
 
-        System.out.println("Enter Drone ID...?:");
-        String startDate = cin.nextLine();
+        String sql = "UPDATE Rental SET drone_id = ? WHERE rental_no LIKE ?";
 
-        String sql = "";
-
-        Utilities.placeholder();
+        SQL.ps_scheduleDelivery(droneID, rentalNo, sql);
     }
 
+    // rental wit no drones
     private static void schedulePickup(Scanner cin) {
-        System.out.println("Enter USER ID:");
-        String firstName = cin.nextLine();
+        System.out.println("What rental_no?");
+        int rentalNo = cin.nextInt();
 
-        System.out.println("What to deliver?");
-        String attributeToUpdate = cin.nextLine();
+        String sql = "DELETE FROM Rental WHERE rental_no = ?";
 
-        System.out.println("Enter Warehouse Address...?:");
-        String startDate = cin.nextLine();
-
-        String sql = "";
-
-        Utilities.placeholder();
+        SQL.ps_schedulePickup(rentalNo, sql);
     }
 
     private static void findTotalEquipmentRentedByMember(Scanner cin) {
