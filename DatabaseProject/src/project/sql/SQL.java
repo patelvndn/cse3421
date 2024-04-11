@@ -127,7 +127,7 @@ public class SQL {
      * @param track_name
      *            track name to search by
      */
-    public static void ps_editMember(String sql, String first_name, String attr,
+    public static void ps_editMember(String sql, String first_name, String last_name, String attr,
             String new_attr) {
         try {
             ps = GRS.conn.prepareStatement(sql);
@@ -141,6 +141,7 @@ public class SQL {
             }
 
             ps.setString(3, first_name);
+			ps.setString(4, last_name);
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -248,14 +249,14 @@ public class SQL {
 	public static void ps_rentEquipment(String sql, String sql2, int userId, int equipmentSerialNo, double value, String estDoa, int empSsn) {
 		try {
 			ps = GRS.conn.prepareStatement(sql);
-			ps.setInt(1, userId);
-			ps.setInt(2, equipmentSerialNo);
+			ps.setInt(1, equipmentSerialNo);
 
 			PreparedStatement ps2 = GRS.conn.prepareStatement(sql2);
 			ps2.setDouble(1, value);
 			ps2.setString(2, estDoa);
 			ps2.setInt(3, empSsn);
 			ps2.setInt(4, userId);
+			ps2.setInt(5, equipmentSerialNo);
 
 			int rowsAffected2 = ps2.executeUpdate();
 
