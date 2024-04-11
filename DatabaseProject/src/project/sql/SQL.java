@@ -1,7 +1,6 @@
 package project.sql;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -238,7 +237,7 @@ public class SQL {
     public static void ps_equipType(String sql, String type, int year) {
         try {
             ps = GRS.conn.prepareStatement(sql);
-            ps.setString(1, type);
+            ps.setString(1, "%"+type+"%");
             ps.setInt(2, year);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
