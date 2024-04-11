@@ -2,7 +2,6 @@ package project.main;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -222,37 +221,32 @@ public class GRS {
         System.out.println("Enter USER ID:");
         String id = cin.nextLine();
 
-        String sql = "Select COUNT(*) FROM Rental WHERE user_id LIKE ?";
+        String sql = "Select COUNT(*) AS Equipment_Rented FROM Rental WHERE user_id = ?";
 
         SQL.ps_numRented(sql, id);
     }
 
     private static void findMostPopularItem(Scanner cin) {
-        String sql = "Select COUNT(*) FROM Deliver ORDER Desc GROUP BY equipment_id LIMIT 1";
+        String sql = "SELECT equipment_ID, COUNT(*) AS Number_Out FROM Rental GROUP BY equipment_ID ORDER BY Number_Out DESC LIMIT 1;";
 
         SQL.sqlQuery(conn, sql);
     }
 
     private static void findMostFrequentManufacturer(Scanner cin) {
 
-        String sql = "Select COUNT(*) FROM Deliver, Manufacturer JOIN Deliver ON Manufacturer BY (Equipment_id = Equipment_id) ORDER Desc GROUP BY Manufacturer LIMIT 1";
+        String sql = "SELECT E.manufacturer_name, E.manufacturer_address FROM Equipment AS E, (SELECT equipment_ID, COUNT(*) AS Number_Out FROM Rental GROUP BY equipment_ID ORDER BY Number_Out DESC LIMIT 1) AS Q WHERE E.equipment_serial_no = Q.equipment_ID;";
 
         SQL.sqlQuery(conn, sql);
     }
 
     private static void findMostUsedDrone(Scanner cin) {
-        String sql = "Select COUNT(*) FROM Deliver ORDER Desc GROUP BY drone_id LIMIT 1";
+        String sql = "SELECT drone_ID, COUNT(*) AS Deliveries FROM Rental GROUP BY drone_ID ORDER BY drone_ID DESC LIMIT 1;";
 
         SQL.sqlQuery(conn, sql);
     }
 
     private static void findMemberWithMostItemsRented(Scanner cin) {
-
-        /**
-         * SELECT member_id, COUNT(*) AS total_items_rented FROM renting GROUP
-         * BY member_id ORDER BY total_items_rented DESC LIMIT 1;
-         */
-        String sql = "Select User_id, count(*) FROM Rental GROUP BY user_id ORDER BY Desc LIMIT 1";
+        String sql = "SELECT user_id, COUNT(*) AS Rentals FROM Rental GROUP BY user_id ORDER BY user_id DESC LIMIT 1;";
 
         SQL.sqlQuery(conn, sql);
     }
@@ -265,18 +259,15 @@ public class GRS {
         System.out.println("Enter year:");
         int id = cin.nextInt();
 
-        /**
-         * SELECT description FROM equipment WHERE type_of_equipment =
-         * 'specified_type' AND release_year < 'specified_year';
-         */
-        String sql = "Select description FROM equipment WHERE description LIKE ? AND year < ?";
+        String sql = "SELECT equipment_serial_no, equipment_model, description FROM Equipment WHERE description LIKE ? AND year < ?;";
 
         SQL.ps_equipType(sql, type, id);
     }
 
     private static void generateReports(Scanner cin) {
-        System.out.print("1. Add New Record\n" + "2. Edit Record\n"
-                + "3. Search Records\n" + "4. Delete Records\n"
+        System.out.print("1. Find Total Equipment Rented By Member\n" + "2. Find Most Popular Item\n"
+                + "3. Find Most Frequent Manufacturer\n" + "4. Find Most Used Drone\n"
+				+ "5. Find Member With Most Items Rented\n" + "6. Find Equipment By Type Released Before Year\n"
                 + "Input numerical selection (or 'x' to return to main menu): ");
         String input = cin.nextLine();
 
